@@ -81,23 +81,24 @@ def load_character(filename):
     file.close()
     #I created an empty dictionary to hold the data
     data = {}
-    #AI helped me here
-    #Goes through each line and extract the label and value
+    #Goes through each line and extracts the label and value
     for line in lines:
-        #Split only at the first ": " to separate key and value
-        if ":" in line:
-            #Convert the key to lowercase and replace spaces with underscores
-            key, value = line.strip().split(": ", 1)
-            data[key.lower().replace(" ", "_")] = value
-    #Convert number values from strings to integers
+        line = line.strip()
+        if not line:
+            continue  # skip blank lines
+        if ": " in line:
+            #Split only at the first ": " to separate key and value
+            key, value = line.split(": ", 1)
+            #Converts the key to lowercase and replace spaces with underscores
+            data[key.lower().replace(" ", "_")] = value.strip()
+    #Converts number values from strings to integers
     character = {"name": data.get("character_name", "Unknown"), "class": data.get("class", "Unknown"), "level": int(data.get("level", 1)), "strength": int(data.get("strength", 0)), "magic": int(data.get("magic", 0)), "health": int(data.get("health", 0)), "gold": int(data.get("gold", 0))}
-    #Return the reconstructed character dictionary
+    #Returns the reconstructed character dictionary
     return character
 
 
 def display_character(character):
     #Prints formatted character sheet
-
     print("\n=== CHARACTER SHEET ===")
     print(f"Name: {character['name']}")
     print(f"Class: {character['class']}")
@@ -110,17 +111,16 @@ def display_character(character):
 
 
 def level_up(character):
-#Increases character level and recalculates stats
-#Return the reconstructed character dictionary
-#Add 1 to the current level
+    #Increases character level and recalculates stats
+    #Add 1 to the current level
     character["level"] += 1
-#Recalculate the stats for the new level
+    #Recalculate the stats for the new level
     strength, magic, health = calculate_stats(character["class"], character["level"])
-#Update the character’s dictionary values
+    #Update the character’s dictionary values
     character["strength"] = strength
     character["magic"] = magic
     character["health"] = health
-#Lets the player know they leveled up
+    #Lets the player know they leveled up
     print(f"{character['name']} leveled up to Level {character['level']}!")
 
 
